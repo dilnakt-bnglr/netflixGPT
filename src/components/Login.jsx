@@ -39,17 +39,19 @@ const Login = () => {
             className="p-2 bg-gray-700 text-white w-full rounded-sm"
           />
           <button className="p-2 mt-8 bg-red-500 w-full rounded-sm cursor-pointer">
-            Sign in
+            {isSignInForm ? "Sign In" : "Sign Up"}
           </button>
-          <div className="text-white flex justify-between mb-5">
-            <div className="flex">
-              <input type="checkbox" />
-              <p className="ml-1">Remeber me</p>
+          {isSignInForm && (
+            <div className="text-white flex justify-between mb-5">
+              <div className="flex">
+                <input type="checkbox" />
+                <p className="ml-1">Remeber me</p>
+              </div>
+              <div>
+                <p>Need Help?</p>
+              </div>
             </div>
-            <div>
-              <p>Need Help?</p>
-            </div>
-          </div>
+          )}
           <p className="text-white cursor-pointer" onClick={toggleSignInForm}>
             {isSignInForm
               ? "New to Netflix? Sign up now"

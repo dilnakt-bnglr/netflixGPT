@@ -1,11 +1,68 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { checkValidateData } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
+
+  const handleButtonClick = () => {
+    const message = checkValidateData(
+      email.current.value,
+      password.current.value,
+    );
+    setErrorMessage(message);
+    if (message) return;
+
+    if (!isSignInForm) {
+      // sign up
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode + "-" + errorMessage);
+        });
+    } else {
+      // sign in
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode + "-" + errorMessage);
+        });
+    }
+  };
+
   return (
     <div className="relative min-h-screen">
       <Header />
@@ -17,28 +74,38 @@ const Login = () => {
         />
       </div>
       <div className="absolute inset-0 flex items-center justify-center ">
-        <form className="w-3/12 bg-black opacity-80 p-10 h-[70%] text-white">
+        <form
+          className="w-3/12 bg-black opacity-80 p-10 h-[70%] text-white"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <h2 className="text-white mb-3 text-xl">
             {isSignInForm ? "Sign In" : "Sign Up"}
           </h2>
           {!isSignInForm && (
             <input
               type="text"
+              ref={name}
               placeholder="Full Name"
               className="p-2 mb-2 bg-gray-700 text-white w-full rounded-sm"
             />
           )}
           <input
             type="text"
+            ref={email}
             placeholder="Email Address"
             className="p-2 mb-2 bg-gray-700 text-white w-full rounded-sm"
           />
           <input
             type="password"
+            ref={password}
             placeholder="Password"
             className="p-2 bg-gray-700 text-white w-full rounded-sm"
           />
-          <button className="p-2 mt-8 bg-red-500 w-full rounded-sm cursor-pointer">
+          <p className="text-red-600">{errorMessage}</p>
+          <button
+            className="p-2 mt-8 bg-red-700 w-full rounded-sm cursor-pointer"
+            onClick={handleButtonClick}
+          >
             {isSignInForm ? "Sign In" : "Sign Up"}
           </button>
           {isSignInForm && (
@@ -52,7 +119,10 @@ const Login = () => {
               </div>
             </div>
           )}
-          <p className="text-white cursor-pointer" onClick={toggleSignInForm}>
+          <p
+            className="text-white cursor-pointer mt-10"
+            onClick={toggleSignInForm}
+          >
             {isSignInForm
               ? "New to Netflix? Sign up now"
               : "Already registered?Sign in now"}

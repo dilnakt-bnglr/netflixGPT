@@ -3,7 +3,7 @@ import { nowPlayingMovies } from "./movieData";
 
 const moviesSlice = createSlice({
   name: "movies",
-  initialState: nowPlayingMovies,
+  initialState: { moviesList: nowPlayingMovies },
   reducers: {},
 });
 

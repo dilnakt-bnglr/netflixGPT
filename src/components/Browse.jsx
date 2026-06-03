@@ -1,13 +1,14 @@
 import React from "react";
 import Header from "./Header";
-import { useSelector } from "react-redux";
+import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 
 const Browse = () => {
-  const movies = useSelector((store) => store.movies);
-  console.log(movies);
   return (
     <div>
       <Header />
+      <MainContainer />
+      <SecondaryContainer />
     </div>
   );
 };

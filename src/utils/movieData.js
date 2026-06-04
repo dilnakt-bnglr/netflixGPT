@@ -358,7 +358,7 @@ export const videoBackground = [
         iso_639_1: "en",
         iso_3166_1: "US",
         name: "Official Trailer",
-        key: "EDGE_OF_MIDNIGHT_TRL1",
+        key: "c51ND9Hdbw0",
         site: "YouTube",
         size: 1080,
         type: "Trailer",
@@ -740,3 +740,8 @@ export const videoBackground = [
     ],
   },
 ];
+
+export const getBackgroundById = (id) => {
+  const movieBg = videoBackground.find((video) => video.id === id);
+  return movieBg ? movieBg.results : undefined;
+};
